@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
 export const FacebookAuth = () => {
-    const PAGE_ID = "103426328252964";
+    const PAGE_ID = "<PAGE_ID>";
     const image = "/facebook.png";
     const isFb = useInitFbSDK();
     // App state
@@ -72,27 +72,6 @@ export const FacebookAuth = () => {
     }, [isFb]);
     return(
         <div style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
-            <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image={image}
-                    alt="fb"
-                />
-                <CardActions>
-                    <Button size="small">Authenticate</Button>
-                </CardActions>
-            </Card>
-
-            {fbUserAccessToken ? (
-                <Button onClick={logOutOfFB} className="btn confirm-btn">
-                Log out
-                </Button>
-            ) : (
-                <Button onClick={logInToFB} className="btn confirm-btn">
-                Login with Facebook
-                </Button>
-            )}
 
             {fbPageAccessToken ? (
                 <section className="app-section">
@@ -103,6 +82,7 @@ export const FacebookAuth = () => {
                     placeholder="Message..." 
                     disabled={isPublishing}
                 />
+                <input type="file" name="image" ></input>
                 <Button
                     onClick={sendPostToPage}
                     className="btn confirm-btn"
@@ -112,7 +92,25 @@ export const FacebookAuth = () => {
                 </Button>
                 </section>
             ) : (
-                <h2 className="placeholder-container">Welcome!</h2>
+                <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                    component="img"
+                    height="140"
+                    image={image}
+                    alt="fb"
+                />
+                <CardActions>
+                {fbUserAccessToken ? (
+                    <Button onClick={logOutOfFB}>
+                    Log out
+                    </Button>
+                ) : (
+                    <Button onClick={logInToFB} >
+                    Login with Facebook
+                    </Button>
+                )}
+                </CardActions>
+            </Card>
             )}
         </div>
     )
