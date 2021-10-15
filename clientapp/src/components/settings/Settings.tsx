@@ -4,7 +4,7 @@ import React from 'react';
 export const Settings = () => {
     const image = "/facebook.png";
     return(
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     component="img"
