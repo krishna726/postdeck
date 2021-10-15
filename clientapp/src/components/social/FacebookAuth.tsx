@@ -4,7 +4,7 @@ import { useInitFbSDK } from '../Auth/fb-hook';
 
 export const FacebookAuth = () => {
     const PAGE_ID = "<PAGE_ID>";
-    const image = "/facebook.png";
+    const image = "/assets/facebook.png";
     const isFb = useInitFbSDK();
     // App state
     const [fbUserAccessToken, setFbUserAccessToken] = React.useState();
@@ -71,8 +71,7 @@ export const FacebookAuth = () => {
         }
     }, [isFb]);
     return(
-        <div style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
-
+        <div>
             {fbPageAccessToken ? (
                 <section className="app-section">
                 <h3>Write something to the page</h3>
@@ -94,12 +93,13 @@ export const FacebookAuth = () => {
             ) : (
                 <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
+                    className="card-img"
                     component="img"
-                    height="140"
+                    height="80"
                     image={image}
                     alt="fb"
                 />
-                <CardActions>
+                <CardActions className="card-link">
                 {fbUserAccessToken ? (
                     <Button onClick={logOutOfFB}>
                     Log out
