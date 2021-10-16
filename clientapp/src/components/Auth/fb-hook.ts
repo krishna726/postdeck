@@ -25,7 +25,7 @@ export const useInitFbSDK = () => {
   (window as any).fbAsyncInit = () => {
     (window as any).FB.init({
       // Find your App ID on https://developers.facebook.com/apps/
-      appId: "<APP_ID>",
+      appId: process.env.REACT_APP_APPID,
       cookie: true,
       xfbml: true,
       version: "v8.0",

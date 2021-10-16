@@ -1,12 +1,10 @@
 // Find your App ID in the App Dashboard on Facebook for Developers.
-const FACEBOOK_APP_ID = "1007342106711861";
-
 export default function initFacebookSDK() {
   return new Promise((resolve) => {
     // Wait for the Facebook SDK to initialize before starting the React app.
     (window as any).fbAsyncInit = function () {
         (window as any).FB.init({
-        appId: FACEBOOK_APP_ID,
+        appId: process.env.REACT_APP_APPID,
         cookie: true,
         xfbml: true,
         version: "v10.0",

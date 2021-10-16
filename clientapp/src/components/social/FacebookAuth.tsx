@@ -3,10 +3,9 @@ import React, { useEffect } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
 export const FacebookAuth = () => {
-    const PAGE_ID = "<PAGE_ID>";
+    const PAGE_ID = process.env.REACT_APP_PAGEID;
     const image = "/assets/facebook.png";
     const isFb = useInitFbSDK();
-    // App state
     const [fbUserAccessToken, setFbUserAccessToken] = React.useState();
     const [fbPageAccessToken, setFbPageAccessToken] = React.useState();
     const [postText, setPostText] = React.useState("");
