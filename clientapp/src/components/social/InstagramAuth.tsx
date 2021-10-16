@@ -28,10 +28,12 @@ export const InstagramAuth = () => {
 
     // Check if the user is authenticated with Facebook
     useEffect(() => {
+      if (isFb) {
         (window as any).FB.getLoginStatus((response:any) => {
         setFbUserAccessToken(response.authResponse?.accessToken);
         });
-    }, []);
+      }
+    }, [isFb]);
 
 
     const logInToFB = React.useCallback(() => {
@@ -119,23 +121,23 @@ export const InstagramAuth = () => {
     };
 
     const shareInstagramPost = async () => {
-    setIsSharingPost(true);
-    const facebookPages:any = await getFacebookPages();
-    const instagramAccountId = await getInstagramAccountId(facebookPages[0].id);
-    const mediaObjectContainerId = await createMediaObjectContainer(
-        instagramAccountId
-    );
+      setIsSharingPost(true);
+      const facebookPages:any = await getFacebookPages();
+      const instagramAccountId = await getInstagramAccountId(facebookPages[0].id);
+      const mediaObjectContainerId = await createMediaObjectContainer(
+          instagramAccountId
+      );
 
-    await publishMediaObjectContainer(
-        instagramAccountId,
-        mediaObjectContainerId
-    );
+      await publishMediaObjectContainer(
+          instagramAccountId,
+          mediaObjectContainerId
+      );
 
-    setIsSharingPost(false);
+      setIsSharingPost(false);
 
-    // Reset the form state
-    setImageUrl("");
-    setPostCaption("");
+      // Reset the form state
+      setImageUrl("");
+      setPostCaption("");
     };
     
     return(
