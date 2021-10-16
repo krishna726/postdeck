@@ -43,7 +43,7 @@ export const FacebookAuth = () => {
             ({ access_token }:any) => setFbPageAccessToken(access_token)
         );
         }
-    }, [fbUserAccessToken]);
+    }, [fbUserAccessToken, PAGE_ID]);
 
     // Publishes a post on the Facebook page
     const sendPostToPage = React.useCallback(() => {
@@ -61,7 +61,7 @@ export const FacebookAuth = () => {
             setIsPublishing(false);
         }
         );
-    }, [postText, fbPageAccessToken]);
+    }, [postText, fbPageAccessToken, PAGE_ID]);
 
 
     useEffect(()=> {
