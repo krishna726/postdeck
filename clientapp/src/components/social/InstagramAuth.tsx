@@ -75,7 +75,7 @@ export const InstagramAuth = () => {
             facebookPageId,
             {
               access_token: fbUserAccessToken,
-              fields: "instagram_business_account,id,username,profile_picture_url",
+              fields: "instagram_business_account,id,username",
             },
             (response:any) => {
               resolve(response.instagram_business_account.id);
