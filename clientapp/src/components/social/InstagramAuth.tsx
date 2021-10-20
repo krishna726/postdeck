@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardMedia } from '@mui/material';
+import { Button, Card, CardActions, CardMedia, Modal, Backdrop, Fade} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
@@ -10,6 +10,11 @@ export const InstagramAuth = () => {
     const [postCaption, setPostCaption] = useState("");
     const [isSharingPost, setIsSharingPost] = useState(false);
     const [fbUserAccessToken, setFbUserAccessToken] = useState("");
+
+    //Modal handling
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     // Checks if the user is logged in to Facebook
     useEffect(() => {
@@ -44,6 +49,9 @@ export const InstagramAuth = () => {
             // Scopes that allow us to publish content to Instagram
             scope: "instagram_basic,pages_show_list",
         });
+
+        //Open our modal with post form
+        handleOpen();
     }, []);
 
     const logOutOfFB = () => {
@@ -143,47 +151,63 @@ export const InstagramAuth = () => {
     return(
         <div>
         {fbUserAccessToken ? (
-          <section className="app-section">
-            <h3>2. Send a post to Instagram</h3>
-            <input
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Enter a JPEG image url..."
-            />
-            <textarea
-              value={postCaption}
-              onChange={(e) => setPostCaption(e.target.value)}
-              placeholder="Write a caption..."
-            />
-            <button
-              onClick={shareInstagramPost}
-              className="btn action-btn"
-              disabled={isSharingPost || !imageUrl}
-            >
-              {isSharingPost ? "Sharing..." : "Share"}
-            </button>
-          </section>
-        ) : null}
-            <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    className="card-img"
-                    component="img"
-                    height="80"
-                    image={image}
-                    alt="fb"
+          <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+          >
+            <Fade in={open}>
+              <section className="app-section">
+                <h3>2. Send a post to Instagram</h3>
+                <input
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="Enter a JPEG image url..."
                 />
-                <CardActions className="card-link">
-                {fbUserAccessToken ? (
-                    <Button onClick={logOutOfFB}>
-                    Log out of Facebook
-                    </Button>
-                ) : (
-                    <Button onClick={logInToFB}>
-                    Login with Facebook
-                    </Button>
-                )}
-                </CardActions>
-            </Card>
+                <textarea
+                  value={postCaption}
+                  onChange={(e) => setPostCaption(e.target.value)}
+                  placeholder="Write a caption..."
+                />
+                <button
+                  onClick={shareInstagramPost}
+                  className="btn action-btn"
+                  disabled={isSharingPost || !imageUrl}
+                >
+                  {isSharingPost ? "Sharing..." : "Share"}
+                </button>
+              </section>
+            </Fade>
+          </Modal>
+        ) : null }
+        
+        <Card sx={{ maxWidth: 345 }}>
+          <CardMedia
+            className="card-img"
+            component="img"
+            height="80"
+            image={image}
+            alt="fb"
+          />
+          <CardActions className="card-link">
+          {fbUserAccessToken ? (
+            <Button onClick={logOutOfFB}>
+            Log out of Facebook
+            </Button>
+          ) : (
+            <Button onClick={logInToFB}>
+            Login with Facebook
+            </Button>
+          )}
+          </CardActions>
+        </Card>
+            
         </div>
     )
 }
