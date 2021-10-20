@@ -182,19 +182,20 @@ export const InstagramAuth = () => {
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
                     />
-                    <br />
-                    <TextField id="outlined-basic" label="Write Caption" variant="outlined"
-                      value={postCaption}
-                      onChange={(e) => setPostCaption(e.target.value)} margin="normal"
-                    />
-                    <Button variant="outlined"
-                      onClick={shareInstagramPost}
-                      className="btn action-btn"
-                      disabled={isSharingPost || !imageUrl}
-                    >
-                      {isSharingPost ? "Sharing..." : "Share"}
-                    </Button>
                   </Typography>
+                  <br />
+                  <TextField id="outlined-basic" label="Write Caption" variant="outlined"
+                    value={postCaption}
+                    onChange={(e) => setPostCaption(e.target.value)} margin="normal"
+                  />
+                  <br />
+                  <Button variant="outlined"
+                    onClick={shareInstagramPost}
+                    className="btn action-btn"
+                    disabled={isSharingPost || !imageUrl}
+                  >
+                    {isSharingPost ? "Sharing..." : "Share"}
+                  </Button>
                 </section>
               </Box>
             </Fade>
