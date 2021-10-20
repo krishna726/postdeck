@@ -1,39 +1,46 @@
-import { Button, Card, CardActions, CardMedia } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useInitFbSDK } from '../Auth/fb-hook';
 
-export const FacebookAuth = () => {
+interface IFacebookAuth {
+    fbAccessToken: string;
+    updateFbAccessToken: Function;
+    fbUserToken: string;
+    updateFbUserToken: Function;
+    isFb: boolean;
+}
+
+export const FacebookAuth = (props: IFacebookAuth) => {
     const PAGE_ID = process.env.REACT_APP_PAGEID;
-    const image = "/assets/facebook.png";
-    const isFb = useInitFbSDK();
-    const [fbUserAccessToken, setFbUserAccessToken] = React.useState();
-    const [fbPageAccessToken, setFbPageAccessToken] = React.useState();
+    const isFb = props.isFb;
+    const fbPageAccessToken = props.fbAccessToken;
+    const setFbPageAccessToken = props.updateFbAccessToken;
+    const fbUserAccessToken = props.fbUserToken;
+    const setFbUserAccessToken = props.updateFbUserToken;
+
     const [postText, setPostText] = React.useState("");
     const [isPublishing, setIsPublishing] = React.useState(false);
 
     // Logs in a Facebook user
     const logInToFB = React.useCallback(() => {
-        (window as any).FB.login((response:any) => {
-        setFbUserAccessToken(response.authResponse.accessToken);
-        });
-    }, []);
+        if((window as any).FB) {
+            (window as any).FB.login((response:any) => {
+                setFbUserAccessToken(response.authResponse.accessToken || '');
+            });
+        }
+    }, [setFbUserAccessToken]);
 
-    // Logs out the current Facebook user
-    const logOutOfFB = React.useCallback(() => {
-        (window as any).FB.logout(() => {
-        setFbUserAccessToken(undefined);
-        setFbPageAccessToken(undefined);
-        });
-    }, []);
+    useEffect(() => {
+        logInToFB();
+    }, [logInToFB]);
 
     // Checks if the user is logged in to Facebook
     useEffect(() => {
         if (isFb) {
             (window as any).FB.getLoginStatus((response:any) => {
-            setFbUserAccessToken(response.authResponse?.accessToken);
-        });
+                setFbUserAccessToken(response.authResponse?.accessToken);
+            });
         }
-    }, [isFb]);
+    }, [isFb, setFbUserAccessToken]);
 
     // Fetches an access token for the page
     useEffect(() => {
@@ -43,7 +50,7 @@ export const FacebookAuth = () => {
             ({ access_token }:any) => setFbPageAccessToken(access_token)
         );
         }
-    }, [fbUserAccessToken, PAGE_ID]);
+    }, [fbUserAccessToken, PAGE_ID, setFbPageAccessToken]);
 
     // Publishes a post on the Facebook page
     const sendPostToPage = React.useCallback(() => {
@@ -90,26 +97,9 @@ export const FacebookAuth = () => {
                 </Button>
                 </section>
             ) : (
-                <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    className="card-img"
-                    component="img"
-                    height="80"
-                    image={image}
-                    alt="fb"
-                />
-                <CardActions className="card-link">
-                {fbUserAccessToken ? (
-                    <Button onClick={logOutOfFB}>
-                    Log out
-                    </Button>
-                ) : (
-                    <Button onClick={logInToFB} >
-                    Login with Facebook
-                    </Button>
-                )}
-                </CardActions>
-            </Card>
+                <div>
+                    <h1>Missing page access token.</h1>
+                </div>
             )}
         </div>
     )
