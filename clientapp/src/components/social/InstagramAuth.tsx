@@ -177,14 +177,18 @@ export const InstagramAuth = () => {
             <Fade in={open}>
               <Box component="form" sx={style} noValidate autoComplete="off">
                 <section className="app-section">
-                  <Typography id="transition-modal-title" variant="h6" component="h2">
+                  <Typography id="transition-modal-title" variant="h6" component="h2" margin="normal">
                     Post to Instagram
                   </Typography>
-                  <input id="outlined-basic"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="Enter a JPEG image url..."
-                  />
+                  <Button id="outlined-basic" variant="outlined">
+                    <input id="outlined-basic"
+                      value={imageUrl}
+                      type="file"
+                      accept=".jpg, .jpeg, .png"
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="Upload an Image" hidden
+                    />
+                  </Button>
                   <br />
                   <TextField id="outlined-basic" label="Write Caption" variant="outlined"
                     value={postCaption}
