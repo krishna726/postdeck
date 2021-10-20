@@ -178,11 +178,13 @@ export const InstagramAuth = () => {
               <Box component="form" sx={style} noValidate autoComplete="off">
                 <section className="app-section">
                   <Typography id="transition-modal-title" variant="h6" component="h2">
-                    <input
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                    />
+                    Post to Instagram
                   </Typography>
+                  <input id="outlined-basic"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="Enter a JPEG image url..."
+                  />
                   <br />
                   <TextField id="outlined-basic" label="Write Caption" variant="outlined"
                     value={postCaption}
