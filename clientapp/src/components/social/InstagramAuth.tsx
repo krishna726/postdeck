@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardMedia, Modal, Backdrop, Box, Fade, TextField} from '@mui/material';
+import { Button, Card, CardActions, CardMedia, Modal, Backdrop, Box, Fade, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
@@ -177,25 +177,24 @@ export const InstagramAuth = () => {
             <Fade in={open}>
               <Box component="form" sx={style} noValidate autoComplete="off">
                 <section className="app-section">
-                  <h3>2. Send a post to Instagram</h3>
-                  <Button variant="outlined" id="outlined-basic" component="label" >
-                    <label>Upload Image</label>
+                  <Typography id="transition-modal-title" variant="h6" component="h2">
                     <input
                       value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)} hidden
+                      onChange={(e) => setImageUrl(e.target.value)}
                     />
-                  </Button>
-                  <TextField id="outlined-basic" label="Write Caption" variant="outlined"
-                    value={postCaption}
-                    onChange={(e) => setPostCaption(e.target.value)}
-                  />
-                  <button
-                    onClick={shareInstagramPost}
-                    className="btn action-btn"
-                    disabled={isSharingPost || !imageUrl}
-                  >
-                    {isSharingPost ? "Sharing..." : "Share"}
-                  </button>
+                    <br />
+                    <TextField id="outlined-basic" label="Write Caption" variant="outlined"
+                      value={postCaption}
+                      onChange={(e) => setPostCaption(e.target.value)} margin="normal"
+                    />
+                    <Button variant="outlined"
+                      onClick={shareInstagramPost}
+                      className="btn action-btn"
+                      disabled={isSharingPost || !imageUrl}
+                    >
+                      {isSharingPost ? "Sharing..." : "Share"}
+                    </Button>
+                  </Typography>
                 </section>
               </Box>
             </Fade>
