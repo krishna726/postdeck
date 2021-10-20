@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardMedia, Modal, Backdrop, Fade} from '@mui/material';
+import { Button, Card, CardActions, CardMedia, Modal, Backdrop, Box, Fade, TextField} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
@@ -15,6 +15,18 @@ export const InstagramAuth = () => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const style = {
+      position: 'absolute' as 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #000',
+      boxShadow: 24,
+      p: 4,
+    };
 
     // Checks if the user is logged in to Facebook
     useEffect(() => {
@@ -163,26 +175,29 @@ export const InstagramAuth = () => {
           }}
           >
             <Fade in={open}>
-              <section className="app-section">
-                <h3>2. Send a post to Instagram</h3>
-                <input
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="Enter a JPEG image url..."
-                />
-                <textarea
-                  value={postCaption}
-                  onChange={(e) => setPostCaption(e.target.value)}
-                  placeholder="Write a caption..."
-                />
-                <button
-                  onClick={shareInstagramPost}
-                  className="btn action-btn"
-                  disabled={isSharingPost || !imageUrl}
-                >
-                  {isSharingPost ? "Sharing..." : "Share"}
-                </button>
-              </section>
+              <Box component="form" sx={style} noValidate autoComplete="off">
+                <section className="app-section">
+                  <h3>2. Send a post to Instagram</h3>
+                  <Button variant="outlined" id="outlined-basic" component="label" >
+                    <label>Upload Image</label>
+                    <input
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)} hidden
+                    />
+                  </Button>
+                  <TextField id="outlined-basic" label="Write Caption" variant="outlined"
+                    value={postCaption}
+                    onChange={(e) => setPostCaption(e.target.value)}
+                  />
+                  <button
+                    onClick={shareInstagramPost}
+                    className="btn action-btn"
+                    disabled={isSharingPost || !imageUrl}
+                  >
+                    {isSharingPost ? "Sharing..." : "Share"}
+                  </button>
+                </section>
+              </Box>
             </Fade>
           </Modal>
         ) : null }
