@@ -27,6 +27,14 @@ export const Settings = () => {
         }
     }, []);
 
+    const updateAccessToken = (token: string) => {
+        setFbPageAccessToken(token);
+    }
+
+    const updateUserToken = (token: string) => {
+        setFbUserAccessToken(token);
+    }
+
     const onClickCard = (type: string) => {
         let returnValue = <div></div>;
         switch (type) {
@@ -34,9 +42,9 @@ export const Settings = () => {
                 returnValue = (
                     <FacebookAuth
                         fbAccessToken={fbPageAccessToken}
-                        updateFbAccessToken={setFbPageAccessToken}
+                        updateFbAccessToken={updateAccessToken}
                         fbUserToken={fbUserAccessToken}
-                        updateFbUserToken={setFbUserAccessToken}
+                        updateFbUserToken={updateUserToken}
                         isFb={isFb}
                     />
                 )
