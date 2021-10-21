@@ -2,10 +2,11 @@ import { Button, Card, CardActions, CardMedia } from "@mui/material";
 import React, { Fragment } from "react";
 import { CustomDialog } from "../dialog/CustomDialog";
 import { FacebookAuth } from "../social/FacebookAuth";
-// import { InstagramAuth } from "../social/InstagramAuth";
+import { InstagramAuth } from "../social/InstagramAuth";
 
 export const Settings = () => {
-    const image = "/assets/facebook.png";
+    const fbImage = "/assets/facebook.png";
+    const instaImage = "/assets/instagram.png";
     const [isOpen, setIsOpen] = React.useState(false);
     const [authType, setAuthType] = React.useState(<Fragment />);
 
@@ -22,7 +23,9 @@ export const Settings = () => {
                 )
                 break;
             case "Insta":
-                returnValue = (<div>Insta</div>)
+                returnValue = (
+                    <InstagramAuth />
+                )
                 break;
             default:
                 break;
@@ -32,13 +35,13 @@ export const Settings = () => {
     }
 
     return(
-        <div style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-around', marginTop: '20px'}}>
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     className="card-img"
                     component="img"
                     height="80"
-                    image={image}
+                    image={fbImage}
                     alt="fb"
                 />
                 <CardActions className="card-link">
@@ -47,10 +50,23 @@ export const Settings = () => {
                     </Button>
                 </CardActions>
             </Card>
+            <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                    className="card-img"
+                    component="img"
+                    height="80"
+                    image={instaImage}
+                    alt="fb"
+                />
+                <CardActions className="card-link">
+                    <Button onClick={() => onClickCard('Insta')}>
+                        Open Instagram
+                    </Button>
+                </CardActions>
+            </Card>
             <CustomDialog isOpen={isOpen} onClose={onCloseDialog}>
                 {authType}
             </CustomDialog>
-            {/* <InstagramAuth /> */}
         </div>
     )
 }
