@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
+
 
 export const InstagramAuth = () => {
   const isFb = useInitFbSDK();
@@ -24,16 +25,6 @@ export const InstagramAuth = () => {
  *                      FACEBOOK LOGIN
  * --------------------------------------------------------
  */
-
-  // Check if the user is authenticated with Facebook
-  useEffect(() => {
-    if (isFb) {
-      (window as any).FB.getLoginStatus((response: any) => {
-        setFbUserAccessToken(response.authResponse?.accessToken);
-      });
-    }
-  }, [isFb]);
-
 
   const logInToFB = React.useCallback(() => {
     (window as any).FB.login((response: any) => {
@@ -143,23 +134,30 @@ export const InstagramAuth = () => {
     <div>
       {fbUserAccessToken ? (
         <section className="app-section">
-          <h3>2. Send a post to Instagram</h3>
-          <input
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="Enter a JPEG image url..."
-          />
-          <textarea
+          <Typography id="transition-modal-title" variant="h6" component="h2" margin="normal">
+            Post to Instagram
+          </Typography>
+          <Button id="outlined-basic" variant="outlined">
+            <input id="outlined-basic"
+              value={imageUrl}
+              type="file"
+              accept=".jpg, .jpeg, .png"
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="Upload an Image" hidden
+            />
+          </Button>
+          <br />
+          <TextField id="outlined-basic" label="Write Caption" variant="outlined"
             value={postCaption}
-            onChange={(e) => setPostCaption(e.target.value)}
-            placeholder="Write a caption..."
+            onChange={(e) => setPostCaption(e.target.value)} margin="normal"
           />
           {fbUserAccessToken && (
             <Button onClick={logOutOfFB}>
               Log out
             </Button>
           )}
-          <Button
+          <br />
+          <Button variant="outlined"
             onClick={shareInstagramPost}
             className="btn action-btn"
             disabled={isSharingPost || !imageUrl}

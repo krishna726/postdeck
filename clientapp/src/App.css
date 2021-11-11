@@ -13,9 +13,14 @@
 
 .card-img {
   padding: 30px 0px;
+  object-fit: contain !important;
 }
 
 .card-link {
   /* border-top: 1px solid #f3f3f3; */
   box-shadow: 0 0 0.8px 0px grey;
+}
+
+.MuiCard-root {
+  margin: 20px;
 }
