@@ -1,7 +1,7 @@
 import { Button, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
-
+import axios from "axios";
 
 export const InstagramAuth = () => {
   const isFb = useInitFbSDK();
@@ -10,6 +10,39 @@ export const InstagramAuth = () => {
   const [postCaption, setPostCaption] = useState("");
   const [isSharingPost, setIsSharingPost] = useState(false);
   const [fbUserAccessToken, setFbUserAccessToken] = useState("");
+
+  const handleFile = (e:any) => {
+    console.log("File uploading starts");
+   const data = new FormData();
+   data.append('image', e.target.value);
+
+  //  let uploadData = {
+  //   method: 'post',
+  //   url: 'https://api.imgur.com/3/image',
+  //   headers: { 
+  //     'Authorization': 'Client-ID 45ce53c4ff9db72', 
+  //     ...data.getHeaders()
+  //   },
+  //   data : data
+  // };
+
+  axios({
+    method: 'post',
+    url: 'https://api.imgur.com/3/image',
+    headers: { 
+      'Authorization': 'Client-ID 45ce53c4ff9db72', 
+      // ...data.getHeaders()
+    },
+    data : data
+  })
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  }
 
   // Checks if the user is logged in to Facebook
   useEffect(() => {
@@ -142,9 +175,9 @@ export const InstagramAuth = () => {
               value={imageUrl}
               type="file"
               accept=".jpg, .jpeg, .png"
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Upload an Image" hidden
-            />
+              // onChange={(e) => setImageUrl(e.target.value)}
+              onChange={(e) => handleFile(e)}
+              placeholder="Upload an Image" />
           </Button>
           <br />
           <TextField id="outlined-basic" label="Write Caption" variant="outlined"
