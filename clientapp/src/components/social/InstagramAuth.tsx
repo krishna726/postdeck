@@ -27,7 +27,7 @@ export const InstagramAuth = () => {
   .then(function (response) {
     // If response is success get image url and assign it to setImageUrl
     if(response.data.success === true) {
-      setImageUrl(response.data['link']);
+      setImageUrl(response.data.data.link);
     }
   })
   .catch(function (error) {
