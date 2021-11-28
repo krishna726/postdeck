@@ -11,6 +11,10 @@ export const InstagramAuth = () => {
   const [isSharingPost, setIsSharingPost] = useState(false);
   const [fbUserAccessToken, setFbUserAccessToken] = useState("");
 
+  const changeImageUrl = (link:any) => {
+    setImageUrl(link);
+  }
+
   const handleFile = (e:any) => {
    const data = new FormData();
    data.append('image', e.target.files[0]);
@@ -27,7 +31,7 @@ export const InstagramAuth = () => {
   .then(function (response) {
     // If response is success get image url and assign it to setImageUrl
     if(response.data.success === true) {
-      setImageUrl(response.data.link);
+      changeImageUrl(response.data.link);
     }
   })
   .catch(function (error) {
