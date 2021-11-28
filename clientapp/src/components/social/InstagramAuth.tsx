@@ -164,7 +164,7 @@ export const InstagramAuth = () => {
           </Typography>
           <Button id="outlined-basic" variant="outlined">
             <input id="outlined-basic"
-              value={imageUrl}
+              // value={imageUrl}
               type="file"
               accept=".jpg, .jpeg, .png"
               // onChange={(e) => setImageUrl(e.target.value)}
