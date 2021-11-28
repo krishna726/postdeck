@@ -12,9 +12,9 @@ export const InstagramAuth = () => {
   const [fbUserAccessToken, setFbUserAccessToken] = useState("");
 
   const handleFile = (e:any) => {
-    console.log("File uploading starts");
+    console.log("File uploading starts: ", e.target.files[0]);
    const data = new FormData();
-   data.append('image', e.target.value);
+   data.append('image', e.target.files[0]);
 
   //  let uploadData = {
   //   method: 'post',
