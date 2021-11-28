@@ -1,37 +1,45 @@
-import { Button, Card, CardActions, CardMedia } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useInitFbSDK } from '../Auth/fb-hook';
 
-export const FacebookAuth = () => {
+interface IFacebookAuth {
+    isFb?: boolean;
+}
+
+export const FacebookAuth = (props: IFacebookAuth) => {
     const PAGE_ID = process.env.REACT_APP_PAGEID;
-    const image = "/assets/facebook.png";
     const isFb = useInitFbSDK();
-    const [fbUserAccessToken, setFbUserAccessToken] = React.useState();
-    const [fbPageAccessToken, setFbPageAccessToken] = React.useState();
+    const [fbUserAccessToken, setFbUserAccessToken] = React.useState('');
+    const [fbPageAccessToken, setFbPageAccessToken] = React.useState('');
+
     const [postText, setPostText] = React.useState("");
     const [isPublishing, setIsPublishing] = React.useState(false);
 
     // Logs in a Facebook user
     const logInToFB = React.useCallback(() => {
-        (window as any).FB.login((response:any) => {
-        setFbUserAccessToken(response.authResponse.accessToken);
-        });
-    }, []);
+        if((window as any).FB) {
+            (window as any).FB.login((response:any) => {
+                setFbUserAccessToken(response.authResponse.accessToken || '');
+            });
+        }
+    }, [setFbUserAccessToken]);
 
     // Logs out the current Facebook user
     const logOutOfFB = React.useCallback(() => {
-        (window as any).FB.logout(() => {
-        setFbUserAccessToken(undefined);
-        setFbPageAccessToken(undefined);
-        });
+        if((window as any).FB) {
+            (window as any).FB.logout(() => {
+                setFbUserAccessToken('');
+                setFbPageAccessToken('');
+            });
+        }
     }, []);
 
     // Checks if the user is logged in to Facebook
     useEffect(() => {
         if (isFb) {
             (window as any).FB.getLoginStatus((response:any) => {
-            setFbUserAccessToken(response.authResponse?.accessToken);
-        });
+                setFbUserAccessToken(response.authResponse?.accessToken);
+            });
         }
     }, [isFb]);
 
@@ -81,6 +89,11 @@ export const FacebookAuth = () => {
                     disabled={isPublishing}
                 />
                 <input type="file" name="image" ></input>
+                {fbUserAccessToken && (
+                    <Button onClick={logOutOfFB}>
+                        Log out
+                    </Button>
+                )}
                 <Button
                     onClick={sendPostToPage}
                     className="btn confirm-btn"
@@ -90,26 +103,11 @@ export const FacebookAuth = () => {
                 </Button>
                 </section>
             ) : (
-                <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    className="card-img"
-                    component="img"
-                    height="80"
-                    image={image}
-                    alt="fb"
-                />
-                <CardActions className="card-link">
-                {fbUserAccessToken ? (
-                    <Button onClick={logOutOfFB}>
-                    Log out
+                <div>
+                    <Button onClick={logInToFB}>
+                        Log in
                     </Button>
-                ) : (
-                    <Button onClick={logInToFB} >
-                    Login with Facebook
-                    </Button>
-                )}
-                </CardActions>
-            </Card>
+                </div>
             )}
         </div>
     )
