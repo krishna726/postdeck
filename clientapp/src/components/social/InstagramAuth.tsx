@@ -12,19 +12,8 @@ export const InstagramAuth = () => {
   const [fbUserAccessToken, setFbUserAccessToken] = useState("");
 
   const handleFile = (e:any) => {
-    console.log("File uploading starts: ", e.target.files[0]);
    const data = new FormData();
    data.append('image', e.target.files[0]);
-
-  //  let uploadData = {
-  //   method: 'post',
-  //   url: 'https://api.imgur.com/3/image',
-  //   headers: { 
-  //     'Authorization': 'Client-ID 45ce53c4ff9db72', 
-  //     ...data.getHeaders()
-  //   },
-  //   data : data
-  // };
 
   axios({
     method: 'post',
@@ -36,7 +25,10 @@ export const InstagramAuth = () => {
     data : data
   })
   .then(function (response) {
-    console.log(JSON.stringify(response.data));
+    // If response is success get image url and assign it to setImageUrl
+    if(response.data.success === true) {
+      setImageUrl(response.data.link);
+    }
   })
   .catch(function (error) {
     console.log(error);
