@@ -1,6 +1,9 @@
 import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+// import { useAppDispatch } from '../../hooks';
 import { useInitFbSDK } from '../Auth/fb-hook';
+import { actions } from '../interface-enums';
 
 interface IFacebookAuth {
     isFb?: boolean;
@@ -15,14 +18,24 @@ export const FacebookAuth = (props: IFacebookAuth) => {
     const [postText, setPostText] = React.useState("");
     const [isPublishing, setIsPublishing] = React.useState(false);
 
+    const token = useAppSelector(state => state.fb_Reducer.fbToken);
+    const dispatch = useAppDispatch();
+
+    useEffect(()=> {
+        if(isFb) {
+            console.log(token);
+        }
+    }, [isFb, token]);
+
     // Logs in a Facebook user
     const logInToFB = React.useCallback(() => {
         if((window as any).FB) {
             (window as any).FB.login((response:any) => {
                 setFbUserAccessToken(response.authResponse.accessToken || '');
+                dispatch({ type: actions.ADD_FB_TOKEN, payload: token });
             });
         }
-    }, [setFbUserAccessToken]);
+    }, [setFbUserAccessToken, dispatch, token]);
 
     // Logs out the current Facebook user
     const logOutOfFB = React.useCallback(() => {
@@ -71,15 +84,9 @@ export const FacebookAuth = (props: IFacebookAuth) => {
         );
     }, [postText, fbPageAccessToken, PAGE_ID]);
 
-
-    useEffect(()=> {
-        if(isFb) {
-            console.log('FB success')
-        }
-    }, [isFb]);
     return(
         <div>
-            {fbPageAccessToken ? (
+            {(fbPageAccessToken && isFb) ? (
                 <section className="app-section">
                 <h3>Write something to the page</h3>
                 <textarea

@@ -6,10 +6,24 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import { AppBar, Button, Container, Toolbar } from '@mui/material';
+import { AppBar, Button, Container, IconButton, Toolbar } from '@mui/material';
 import { routes } from './routes';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { LoginPage } from './components/login/LoginPage';
+import { LogoutRounded } from '@mui/icons-material';
+import { actions } from './components/interface-enums';
 
 function App() {
+  const isLoggedIn = useAppSelector(state => state.login_reducer.isLoggedIn);
+  const token = sessionStorage.getItem('token');
+  const dispatch = useAppDispatch();
+  if(!isLoggedIn && !token) {
+    return <LoginPage />
+  }
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    dispatch({ type: actions.USER_LOGIN, payload: false });
+  }
   return (
     <div className="App">
       <Router>
@@ -23,6 +37,11 @@ function App() {
                 <Button>
                   <Link className="custom-link" to="/settings">Settings</Link>
                 </Button>
+            </span>
+            <span style={{position: 'absolute', right: '15px'}}>
+              <IconButton onClick={handleLogout} aria-label="delete">
+                <LogoutRounded />
+              </IconButton>
             </span>
           </Toolbar>
         </AppBar>
