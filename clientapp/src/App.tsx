@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -20,10 +20,15 @@ function App() {
   const pathName = window.location.pathname;
   const dispatch = useAppDispatch();
 
+  // TODO: ASYNC CALL
+  useEffect(() => {
+    // async call to get loggedin status
+  });
+
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     dispatch({ type: actions.USER_LOGIN, payload: false });
-    return (<Redirect to="/login" />)
+    window.location.href = window.location.origin+'/';
   }
   return (
     <div className="App">
@@ -49,14 +54,17 @@ function App() {
         }
         <Container>
           <Switch>
-            <Route path="/login"><LoginPage /></Route>
-            <Route path="/register"><RegisterPage /></Route>
+            {!isLoggedIn &&
+              <>
+                <Route exact path="/"><LoginPage /></Route>
+                <Route path="/register"><RegisterPage /></Route>
+              </>
+            }
             {routes.map((route, index) => {
               return(
                 <Route
                   key={index}
                   path={route.path}
-                  exact={route.exact}
                   children={({location}) => {
                     return isLoggedIn ? <route.component /> : <Redirect to={pathName} />
                   }}

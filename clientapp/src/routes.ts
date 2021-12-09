@@ -13,8 +13,7 @@ export const routes = [
       component: Settings
     },
     {
-      path: "/login",
-      exact: true,
+      path: "/",
       component: LoginPage
     },
     {

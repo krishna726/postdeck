@@ -73,7 +73,7 @@ export const RegisterPage = () => {
                     if(!checkLogin(email, password)) {
                         setUsersInLocalDB(email, password, email+password)
                         dispatch({type: actions.REGISTER, payload: {email: email, userToken: email+password}});
-                        history.push('/login')
+                        history.push('/')
                     }else{
                         setRegisterError('User is already available')
                     }
