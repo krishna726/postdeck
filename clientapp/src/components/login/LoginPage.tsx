@@ -63,6 +63,9 @@ export const LoginPage = () => {
             }
         }
     }
+    const goToRegister = () => {
+        history.push('/register');
+    }
 
     return (
         <Container>
@@ -100,7 +103,9 @@ export const LoginPage = () => {
                     <Button variant="contained" onClick={logIn}>
                         Log in
                     </Button>
-                    <Button href="register">Register</Button>
+                    <Button onClick={goToRegister}>
+                        Register
+                    </Button>
                 </Grid>
             </Grid>
         </Container>
