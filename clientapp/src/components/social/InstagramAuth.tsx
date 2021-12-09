@@ -174,8 +174,9 @@ export const InstagramAuth = () => {
           <br />
           <TextField id="outlined-basic" label="Write Caption" variant="outlined"
             value={postCaption}
-            onChange={(e) => setPostCaption(e.target.value)} margin="normal"
+             margin="normal"
           />
+
           {fbUserAccessToken && (
             <Button onClick={logOutOfFB}>
               Log out

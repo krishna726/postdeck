@@ -14,7 +14,7 @@ export const CustomDialog = (props: ICustomDialog) => {
     }
     return (
         <Dialog onClose={handleClose} open={isOpen}>
-            <DialogTitle>Set backup account</DialogTitle>
+            <DialogTitle>Post Deck Editor</DialogTitle>
             {children}
         </Dialog>
     )
