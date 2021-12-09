@@ -2,16 +2,18 @@ import React, { ChangeEvent, useState } from 'react';
 import { Button, Container, Grid, Snackbar, TextField, Typography } from '@mui/material';
 import { useAppDispatch } from '../../hooks';
 import { actions } from '../interface-enums';
-import { checkLogin } from '../utility';
+import { checkLogin, setUsersInLocalDB } from '../utility';
 import { useHistory } from 'react-router';
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [retryPassword, setRetryPassword] = useState('');
     const [emailError, setEmailError] = useState({error: false, helperText: ''});
-    const [passwordError, setPassworError] = useState({error: false, helperText: ''});
-    const [loginError, setLoginError] = useState("");
+    const [passwordError, setPasswordError] = useState({error: false, helperText: ''});
+    const [retryPasswordError, setRetryPasswordError] = useState({error: false, helperText: ''});
+    const [registerError, setRegisterError] = useState('');
     const dispatch = useAppDispatch();
 
     const handleEmailChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,9 +30,19 @@ export const LoginPage = () => {
         setPassword(e.target.value);
         if(e.target.value) {
             if(!checkPasswordValidation(e.target.value)) {
-                setPassworError({error: true, helperText: 'Enter valid password.'})
+                setPasswordError({error: true, helperText: 'Enter valid password with minimum of 6 words and maximum of 10 words.'})
             }else{
-                setPassworError({error: false, helperText: ''})
+                setPasswordError({error: false, helperText: ''})
+            }
+        }
+    }
+    const handleRetryPasswordChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRetryPassword(e.target.value);
+        if(e.target.value) {
+            if(!checkRetryPasswordValidation(e.target.value)) {
+                setRetryPasswordError({error: true, helperText: 'Both passwords are not matching.'})
+            }else{
+                setRetryPasswordError({error: false, helperText: ''})
             }
         }
     }
@@ -48,16 +60,22 @@ export const LoginPage = () => {
         }
         return false;
     }
-    const logIn = () => {
-        if(email && password) {
-            if(!emailError.error && !passwordError.error) {
-                if(checkEmailValidation(email) && checkPasswordValidation(password)) {
-                    if(checkLogin(email, password)) {
-                        dispatch({type: actions.USER_LOGIN, payload: true});
-                        sessionStorage.setItem('token', email+password);
-                        history.push('/home')
-                    } else {
-                        setLoginError('User is not available');
+    const checkRetryPasswordValidation = (retryPassword: string) => {
+        if(password === retryPassword) {
+            return true;
+        }
+        return false;
+    }
+    const register = () => {
+        if(email && password && retryPassword) {
+            if(!emailError.error && !passwordError.error && !retryPasswordError.error) {
+                if(checkEmailValidation(email) && checkPasswordValidation(password) && checkRetryPasswordValidation(retryPassword)) {
+                    if(!checkLogin(email, password)) {
+                        setUsersInLocalDB(email, password, email+password)
+                        dispatch({type: actions.REGISTER, payload: {email: email, userToken: email+password}});
+                        history.push('/login')
+                    }else{
+                        setRegisterError('User is already available')
                     }
                 }
             }
@@ -66,11 +84,11 @@ export const LoginPage = () => {
 
     return (
         <Container>
-            {loginError && <Snackbar open={loginError !== ''} onClose={() => setLoginError('')} message={loginError}></Snackbar>}
+            {registerError && <Snackbar open={registerError !== ''} onClose={() => setRegisterError('')} message={registerError}></Snackbar>}
             <Grid container sx={{marginTop: '50px', display: 'flex', justifyContent: 'center'}}>
                 <Grid item xs={12} sx={{marginBottom: '10px'}}>
                     <h1>
-                        <Typography>Login to your account.</Typography>
+                        <Typography>Register</Typography>
                     </h1>
                 </Grid>
                 <Grid item xs={12} sx={{marginBottom: '10px'}}>
@@ -96,11 +114,22 @@ export const LoginPage = () => {
                         onChange={handlePasswordChange}
                     />
                 </Grid>
+                <Grid item xs={12} sx={{marginBottom: '10px'}}>
+                    <TextField
+                        error={retryPasswordError.error}
+                        helperText={retryPasswordError.helperText}
+                        value={retryPassword}
+                        id="outlined-password-input two"
+                        label="Confirm Password"
+                        type="password"
+                        onChange={handleRetryPasswordChange}
+                    />
+                </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" onClick={logIn}>
-                        Log in
+                    <Button variant="contained" onClick={register}>
+                        Register
                     </Button>
-                    <Button href="register">Register</Button>
+                    <Button href="login">Login</Button>
                 </Grid>
             </Grid>
         </Container>

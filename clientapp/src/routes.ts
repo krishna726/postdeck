@@ -1,14 +1,24 @@
 import { Home } from "./components/home/Home";
+import { LoginPage } from "./components/login/LoginPage";
+import { RegisterPage } from "./components/login/RegisterPage";
 import { Settings } from "./components/settings/Settings";
 
 export const routes = [
     {
-      path: "/",
-      exact: true,
+      path: "/home",
       component: Home
     },
     {
       path: "/settings",
       component: Settings
+    },
+    {
+      path: "/login",
+      exact: true,
+      component: LoginPage
+    },
+    {
+      path: "/register",
+      component: RegisterPage
     }
 ];
