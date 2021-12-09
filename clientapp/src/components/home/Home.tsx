@@ -4,8 +4,7 @@ export const Home = () => {
 
     const { MongoClient } = require("mongodb");
     // Replace the uri string with your MongoDB deployment's connection string.
-    const uri =
-    "mongodb+srv://root:postdeckDB@post-deck.prbu0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    const uri = "";
 
     const client = new MongoClient(uri);
 
