@@ -1,40 +1,73 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
+  Redirect
 } from "react-router-dom";
-import { AppBar, Button, Container, Toolbar } from '@mui/material';
+import { AppBar, Button, Container, IconButton, Toolbar } from '@mui/material';
 import { routes } from './routes';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { LoginPage } from './components/login/LoginPage';
+import { LogoutRounded } from '@mui/icons-material';
+import { actions } from './components/interface-enums';
+import { RegisterPage } from './components/login/RegisterPage';
 
 function App() {
+  const isLoggedIn = useAppSelector(state => state.login_reducer.isLoggedIn);
+  const pathName = window.location.pathname;
+  const dispatch = useAppDispatch();
+
+  // TODO: ASYNC CALL
+  useEffect(() => {
+    // async call to get loggedin status
+  });
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    dispatch({ type: actions.USER_LOGIN, payload: false });
+    window.location.href = window.location.origin+'/';
+  }
   return (
     <div className="App">
       <Router>
-        <AppBar position="static">
+        {isLoggedIn && <AppBar position="static">
           <Toolbar variant="regular">
-            <h5 style={{border: '1px solid', padding: '5px'}}>Post Deck</h5>
-            <span style={{paddingLeft: '20px'}}>
-                <Button>
-                  <Link className="custom-link" to="/">Home</Link>
-                </Button>
-                <Button>
-                  <Link className="custom-link" to="/settings">Settings</Link>
-                </Button>
+            <h5 style={{ border: '1px solid', padding: '5px' }}>Post Deck</h5>
+            <span style={{ paddingLeft: '20px' }}>
+              <Button>
+                <Link className="custom-link" to="/home">Home</Link>
+              </Button>
+              <Button>
+                <Link className="custom-link" to="/settings">Settings</Link>
+              </Button>
+            </span>
+            <span style={{ position: 'absolute', right: '15px' }}>
+              <IconButton onClick={handleLogout} aria-label="delete">
+                <LogoutRounded />
+              </IconButton>
             </span>
           </Toolbar>
         </AppBar>
+        }
         <Container>
           <Switch>
+            {!isLoggedIn &&
+              <>
+                <Route exact path="/"><LoginPage /></Route>
+                <Route path="/register"><RegisterPage /></Route>
+              </>
+            }
             {routes.map((route, index) => {
               return(
                 <Route
                   key={index}
-                  exact={route.exact}
                   path={route.path}
-                  children={<route.component />}
+                  children={({location}) => {
+                    return isLoggedIn ? <route.component /> : <Redirect to={pathName} />
+                  }}
                 />
               )
             })}
